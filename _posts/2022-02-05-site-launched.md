@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Site Launched "
+title: "First Post"
 date: 2022-02-05
 ---
 
