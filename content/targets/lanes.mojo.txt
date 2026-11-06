@@ -1,0 +1,245 @@
+# Generated Mojo Shader Code
+from math import *
+from gpu import *
+
+# CrossGL builtin placeholders
+var position: SIMD[DType.float32, 4] = SIMD[DType.float32, 4](0.0, 0.0, 0.0, 0.0)
+
+# CrossGL math helpers
+fn clamp(value: Float32, min_value: Float32, max_value: Float32) -> Float32:
+    return min(max(value, min_value), max_value)
+
+fn clamp(value: SIMD[DType.float32, 2], min_value: Float32, max_value: Float32) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](clamp(value[0], min_value, max_value), clamp(value[1], min_value, max_value))
+
+fn clamp(value: SIMD[DType.float32, 2], min_value: SIMD[DType.float32, 2], max_value: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](clamp(value[0], min_value[0], max_value[0]), clamp(value[1], min_value[1], max_value[1]))
+
+fn clamp(value: SIMD[DType.float32, 4], min_value: Float32, max_value: Float32) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](clamp(value[0], min_value, max_value), clamp(value[1], min_value, max_value), clamp(value[2], min_value, max_value), clamp(value[3], min_value, max_value))
+
+fn clamp(value: SIMD[DType.float32, 4], min_value: SIMD[DType.float32, 4], max_value: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](clamp(value[0], min_value[0], max_value[0]), clamp(value[1], min_value[1], max_value[1]), clamp(value[2], min_value[2], max_value[2]), clamp(value[3], min_value[3], max_value[3]))
+
+fn lerp(a: Float32, b: Float32, t: Float32) -> Float32:
+    return a + (b - a) * t
+
+fn lerp(a: SIMD[DType.float32, 2], b: SIMD[DType.float32, 2], t: Float32) -> SIMD[DType.float32, 2]:
+    return a + (b - a) * t
+
+fn lerp(a: SIMD[DType.float32, 4], b: SIMD[DType.float32, 4], t: Float32) -> SIMD[DType.float32, 4]:
+    return a + (b - a) * t
+
+fn max(a: Float32, b: Float32) -> Float32:
+    return a if a >= b else b
+
+fn max(a: Int8, b: Int8) -> Int8:
+    return a if a >= b else b
+
+fn max(a: Int16, b: Int16) -> Int16:
+    return a if a >= b else b
+
+fn max(a: Int32, b: Int32) -> Int32:
+    return a if a >= b else b
+
+fn max(a: Int64, b: Int64) -> Int64:
+    return a if a >= b else b
+
+fn max(a: UInt8, b: UInt8) -> UInt8:
+    return a if a >= b else b
+
+fn max(a: UInt16, b: UInt16) -> UInt16:
+    return a if a >= b else b
+
+fn max(a: UInt32, b: UInt32) -> UInt32:
+    return a if a >= b else b
+
+fn max(a: UInt64, b: UInt64) -> UInt64:
+    return a if a >= b else b
+
+fn max(a: SIMD[DType.float32, 2], b: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](a[0] if a[0] >= b[0] else b[0], a[1] if a[1] >= b[1] else b[1])
+
+fn max(a: SIMD[DType.float32, 2], b: Float32) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](a[0] if a[0] >= b else b, a[1] if a[1] >= b else b)
+
+fn max(a: Float32, b: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](a if a >= b[0] else b[0], a if a >= b[1] else b[1])
+
+fn max(a: SIMD[DType.float32, 4], b: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](a[0] if a[0] >= b[0] else b[0], a[1] if a[1] >= b[1] else b[1], a[2] if a[2] >= b[2] else b[2], a[3] if a[3] >= b[3] else b[3])
+
+fn max(a: SIMD[DType.float32, 4], b: Float32) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](a[0] if a[0] >= b else b, a[1] if a[1] >= b else b, a[2] if a[2] >= b else b, a[3] if a[3] >= b else b)
+
+fn max(a: Float32, b: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](a if a >= b[0] else b[0], a if a >= b[1] else b[1], a if a >= b[2] else b[2], a if a >= b[3] else b[3])
+
+fn min(a: Float32, b: Float32) -> Float32:
+    return a if a <= b else b
+
+fn min(a: Int8, b: Int8) -> Int8:
+    return a if a <= b else b
+
+fn min(a: Int16, b: Int16) -> Int16:
+    return a if a <= b else b
+
+fn min(a: Int32, b: Int32) -> Int32:
+    return a if a <= b else b
+
+fn min(a: Int64, b: Int64) -> Int64:
+    return a if a <= b else b
+
+fn min(a: UInt8, b: UInt8) -> UInt8:
+    return a if a <= b else b
+
+fn min(a: UInt16, b: UInt16) -> UInt16:
+    return a if a <= b else b
+
+fn min(a: UInt32, b: UInt32) -> UInt32:
+    return a if a <= b else b
+
+fn min(a: UInt64, b: UInt64) -> UInt64:
+    return a if a <= b else b
+
+fn min(a: SIMD[DType.float32, 2], b: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](a[0] if a[0] <= b[0] else b[0], a[1] if a[1] <= b[1] else b[1])
+
+fn min(a: SIMD[DType.float32, 2], b: Float32) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](a[0] if a[0] <= b else b, a[1] if a[1] <= b else b)
+
+fn min(a: Float32, b: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](a if a <= b[0] else b[0], a if a <= b[1] else b[1])
+
+fn min(a: SIMD[DType.float32, 4], b: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](a[0] if a[0] <= b[0] else b[0], a[1] if a[1] <= b[1] else b[1], a[2] if a[2] <= b[2] else b[2], a[3] if a[3] <= b[3] else b[3])
+
+fn min(a: SIMD[DType.float32, 4], b: Float32) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](a[0] if a[0] <= b else b, a[1] if a[1] <= b else b, a[2] if a[2] <= b else b, a[3] if a[3] <= b else b)
+
+fn min(a: Float32, b: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](a if a <= b[0] else b[0], a if a <= b[1] else b[1], a if a <= b[2] else b[2], a if a <= b[3] else b[3])
+
+fn power(a: Float32, b: Float32) -> Float32:
+    return pow(a, b)
+
+fn power(a: SIMD[DType.float32, 2], b: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](pow(a[0], b[0]), pow(a[1], b[1]))
+
+fn power(a: SIMD[DType.float32, 4], b: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](pow(a[0], b[0]), pow(a[1], b[1]), pow(a[2], b[2]), pow(a[3], b[3]))
+
+fn smoothstep(edge0: Float32, edge1: Float32, x: Float32) -> Float32:
+    var t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0)
+    return t * t * (3.0 - 2.0 * t)
+
+fn smoothstep(edge0: Float32, edge1: Float32, x: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](smoothstep(edge0, edge1, x[0]), smoothstep(edge0, edge1, x[1]))
+
+fn smoothstep(edge0: SIMD[DType.float32, 2], edge1: SIMD[DType.float32, 2], x: Float32) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](smoothstep(edge0[0], edge1[0], x), smoothstep(edge0[1], edge1[1], x))
+
+fn smoothstep(edge0: SIMD[DType.float32, 2], edge1: SIMD[DType.float32, 2], x: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](smoothstep(edge0[0], edge1[0], x[0]), smoothstep(edge0[1], edge1[1], x[1]))
+
+fn smoothstep(edge0: Float32, edge1: Float32, x: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](smoothstep(edge0, edge1, x[0]), smoothstep(edge0, edge1, x[1]), smoothstep(edge0, edge1, x[2]), smoothstep(edge0, edge1, x[3]))
+
+fn smoothstep(edge0: SIMD[DType.float32, 4], edge1: SIMD[DType.float32, 4], x: Float32) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](smoothstep(edge0[0], edge1[0], x), smoothstep(edge0[1], edge1[1], x), smoothstep(edge0[2], edge1[2], x), smoothstep(edge0[3], edge1[3], x))
+
+fn smoothstep(edge0: SIMD[DType.float32, 4], edge1: SIMD[DType.float32, 4], x: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](smoothstep(edge0[0], edge1[0], x[0]), smoothstep(edge0[1], edge1[1], x[1]), smoothstep(edge0[2], edge1[2], x[2]), smoothstep(edge0[3], edge1[3], x[3]))
+
+fn step(edge: Float32, x: Float32) -> Float32:
+    return 0.0 if x < edge else 1.0
+
+fn step(edge: Float32, x: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](step(edge, x[0]), step(edge, x[1]))
+
+fn step(edge: SIMD[DType.float32, 2], x: Float32) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](step(edge[0], x), step(edge[1], x))
+
+fn step(edge: SIMD[DType.float32, 2], x: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 2]:
+    return SIMD[DType.float32, 2](step(edge[0], x[0]), step(edge[1], x[1]))
+
+fn step(edge: Float32, x: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](step(edge, x[0]), step(edge, x[1]), step(edge, x[2]), step(edge, x[3]))
+
+fn step(edge: SIMD[DType.float32, 4], x: Float32) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](step(edge[0], x), step(edge[1], x), step(edge[2], x), step(edge[3], x))
+
+fn step(edge: SIMD[DType.float32, 4], x: SIMD[DType.float32, 4]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](step(edge[0], x[0]), step(edge[1], x[1]), step(edge[2], x[2]), step(edge[3], x[3]))
+
+fn _crossgl_fract_f32(x: Float32) -> Float32:
+    return x - floor(x)
+
+fn _crossgl_mod_f32(a: Float32, b: Float32) -> Float32:
+    return a - floor(a / b) * b
+
+
+# CrossGL vector helpers
+fn _crossgl_construct_f32_4_vf324_012_s(v0: SIMD[DType.float32, 4], s1: Float32) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](v0[0], v0[1], v0[2], s1)
+
+
+# Constant Buffers
+# CrossGL resource metadata: name=Uniforms kind=cbuffer set=0 binding=0 binding_source=automatic
+@value
+struct Uniforms:
+    var u_time: Float32
+    var u_resolution: SIMD[DType.float32, 2]
+
+var u_time: Float32 = 0.0
+var u_resolution: SIMD[DType.float32, 2] = SIMD[DType.float32, 2](0.0, 0.0)
+# Vertex Shader
+# CrossGL shader stage: vertex
+fn vertex_main(a_pos: SIMD[DType.float32, 2]) -> SIMD[DType.float32, 4]:
+    return SIMD[DType.float32, 4](a_pos[0], a_pos[1], 0.0, 1.0)
+
+# Fragment Shader
+fn bitOf(lane: Float32, stage: Float32) -> Float32:
+    return _crossgl_mod_f32(floor((lane / power(2.0, stage))), 2.0)
+
+fn hash(n: Float32) -> Float32:
+    return _crossgl_fract_f32((sin((n * 12.9898)) * 43758.5453))
+
+fn laneCentre(lane: Float32, warp: Float32, x: Float32, laneH: Float32, bandH: Float32) -> Float32:
+    var stage: Float32 = _crossgl_mod_f32(floor(x), 4.0)
+    var phase: Float32 = _crossgl_fract_f32(x)
+    var ease: Float32 = (smoothstep(Float32(0.1), Float32(0.45), Float32(phase)) * (1.0 - smoothstep(Float32(0.55), Float32(0.9), Float32(phase))))
+    var dir: Float32 = ((bitOf(lane, stage) * 2.0) - 1.0)
+    var amp: Float32 = ((power(2.0, stage) * laneH) * 0.5)
+    var drift: Float32 = ((sin((((x * 2.3) + (lane * 0.9)) + (warp * 1.7))) * laneH) * 0.15)
+    return ((((((lane + 0.5) * laneH) + (warp * bandH)) + (bandH * 0.1)) + ((ease * dir) * amp)) + drift)
+
+# CrossGL shader stage: fragment
+fn fragment_main() -> SIMD[DType.float32, 4]:
+    var uv: SIMD[DType.float32, 2] = (SIMD[DType.float32, 2](position[0], position[1]) / u_resolution)
+    var laneCount: Float32 = 16.0
+    var warpCount: Float32 = 3.0
+    var bandH: Float32 = (1.0 / warpCount)
+    var laneH: Float32 = ((bandH * 0.8) / laneCount)
+    var warp: Float32 = floor((uv[1] * warpCount))
+    var local: Float32 = (((uv[1] - (warp * bandH)) - (bandH * 0.1)) / laneH)
+    var lane0: Float32 = floor(local)
+    var t: Float32 = (u_time * 0.05)
+    var x: Float32 = (((uv[0] * 2.4) + t) + (warp * 1.37))
+    var line: Float32 = 0.0
+    var j: Int32 = (-8)
+    while (j <= 8):
+        var lane: Float32 = (lane0 + Float32(j))
+        var inLane: Float32 = (step(0.0, lane) * step(lane, (laneCount - 1.0)))
+        var centre: Float32 = laneCentre(lane, warp, x, laneH, bandH)
+        var dpx: Float32 = (abs((uv[1] - centre)) * u_resolution[1])
+        var weight: Float32 = (0.5 + (0.5 * hash((lane + (warp * 31.0)))))
+        line = max(Float32(line), Float32((((1.0 - smoothstep(Float32(0.5), Float32(1.4), Float32(dpx))) * inLane) * weight)))
+        j = (j + 1)
+    var edgeX: Float32 = (smoothstep(Float32(0.0), Float32(0.22), Float32(uv[0])) * (1.0 - smoothstep(Float32(0.84), Float32(1.0), Float32(uv[0]))))
+    var edgeY: Float32 = (smoothstep(Float32(0.0), Float32(0.08), Float32(uv[1])) * (1.0 - smoothstep(Float32(0.92), Float32(1.0), Float32(uv[1]))))
+    var alpha: Float32 = (((line * edgeX) * edgeY) * 0.85)
+    var ink: SIMD[DType.float32, 4] = SIMD[DType.float32, 4](0.0, 0.0, 0.0, 0.0)
+    var paper: SIMD[DType.float32, 4] = SIMD[DType.float32, 4](1.0, 1.0, 1.0, 0.0)
+    return _crossgl_construct_f32_4_vf324_012_s(lerp(paper, ink, alpha), 1.0)
+

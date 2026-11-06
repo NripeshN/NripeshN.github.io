@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nripeshn.github.io/sitemap.xml

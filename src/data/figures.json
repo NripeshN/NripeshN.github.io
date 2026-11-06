@@ -1,0 +1,86 @@
+{
+  "asAt": "2026-11-06",
+  "crosstl": {
+    "stars": 1696,
+    "forks": 129,
+    "created": "2024-05-02",
+    "license": "Apache-2.0",
+    "description": "Translate GPU shaders and compute kernels between GLSL, HLSL, Metal, SPIR-V and Slang, from CUDA and HIP, and to WGSL, through the CrossGL IR",
+    "topics": [
+      "compiler",
+      "cuda",
+      "directx",
+      "glsl",
+      "gpu",
+      "hlsl",
+      "metal",
+      "python",
+      "shader",
+      "slang",
+      "spir-v",
+      "transpiler",
+      "vulkan",
+      "webgpu",
+      "wgsl"
+    ],
+    "latestRelease": "v3.5.0",
+    "latestReleaseDate": "2026-10-30",
+    "defaultBranchCommits": 1975,
+    "contributorAccounts": 66,
+    "humanContributors": 64,
+    "myContributions": 1552,
+    "pypiReleases": 13,
+    "pypiLatest": "3.5.0"
+  },
+  "github": {
+    "followers": 72,
+    "publicRepos": 65
+  },
+  "pullRequests": {
+    "mergedTotal": 1222,
+    "mergedThirdParty": 96,
+    "mergedMlx": 30
+  },
+  "mlxRocmPr": {
+    "number": 2300,
+    "state": "open",
+    "merged": false,
+    "additions": 46090,
+    "updated": "2026-08-14"
+  },
+  "metalfish": {
+    "stars": 2,
+    "license": "GPL-3.0",
+    "created": "2025-12-26"
+  },
+  "lichessBot": {
+    "username": "Nripesh-MetalFish",
+    "games": 1207,
+    "draws": 982,
+    "wins": 178,
+    "losses": 47,
+    "bullet": 3074,
+    "blitz": 3013,
+    "rapid": 3035,
+    "firstSeen": "2026-01-14",
+    "lastSeen": "2026-07-28"
+  },
+  "panthon": {
+    "pypiReleases": 22,
+    "latest": "0.3.0"
+  },
+  "openalex": [
+    {
+      "title": "Integrating External Tools with Large Language Models (LLMs) to Improve Accuracy",
+      "doi": "https://doi.org/10.1007/978-981-96-1758-6_34",
+      "year": 2025,
+      "citedBy": 2
+    },
+    {
+      "title": "Hybrid Chess Search: Combining Alpha-Beta and Monte Carlo Tree Search on Unified Memory Architectures",
+      "doi": "https://doi.org/10.1007/978-3-032-32726-0_39",
+      "year": 2026,
+      "citedBy": 0
+    }
+  ]
+}

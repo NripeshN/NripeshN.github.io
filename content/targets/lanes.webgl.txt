@@ -1,0 +1,80 @@
+#version 300 es
+precision highp float;
+precision highp int;
+#ifdef GL_VERTEX_SHADER
+layout(location = 0) in vec2 a_pos;
+#endif
+// Constant Buffers
+layout(std140) uniform Uniforms {
+  float u_time;
+  vec2 u_resolution;
+};
+#ifdef GL_VERTEX_SHADER
+// Vertex Shader
+void main() {
+  gl_Position = vec4(a_pos, 0.0, 1.0);
+  return;
+}
+
+#endif
+#ifdef GL_FRAGMENT_SHADER
+// Fragment Shader
+float bitOf(float lane, float stage);
+
+float hash(float n);
+
+float laneCentre(float lane, float warp, float x, float laneH, float bandH);
+
+float bitOf(float lane, float stage) {
+  return mod(floor((lane / pow(2.0, stage))), 2.0);
+}
+
+float hash(float n) { return fract((sin((n * 12.9898)) * 43758.5453)); }
+
+float laneCentre(float lane, float warp, float x, float laneH, float bandH) {
+  float stage = mod(floor(x), 4.0);
+  float phase = fract(x);
+  float ease =
+      (smoothstep(0.1, 0.45, phase) * (1.0 - smoothstep(0.55, 0.9, phase)));
+  float dir = ((bitOf(lane, stage) * 2.0) - 1.0);
+  float amp = ((pow(2.0, stage) * laneH) * 0.5);
+  float drift =
+      ((sin((((x * 2.3) + (lane * 0.9)) + (warp * 1.7))) * laneH) * 0.15);
+  return ((((((lane + 0.5) * laneH) + (warp * bandH)) + (bandH * 0.1)) +
+           ((ease * dir) * amp)) +
+          drift);
+}
+
+layout(location = 0) out vec4 fragColor;
+void main() {
+  vec2 uv = (gl_FragCoord.xy / u_resolution);
+  float laneCount = 16.0;
+  float warpCount = 3.0;
+  float bandH = (1.0 / warpCount);
+  float laneH = ((bandH * 0.8) / laneCount);
+  float warp = floor((uv.y * warpCount));
+  float local = (((uv.y - (warp * bandH)) - (bandH * 0.1)) / laneH);
+  float lane0 = floor(local);
+  float t = (u_time * 0.05);
+  float x = (((uv.x * 2.4) + t) + (warp * 1.37));
+  float line = 0.0;
+  for (int j = (-8); (j <= 8); j = (j + 1)) {
+    float lane = (lane0 + float(j));
+    float inLane = (step(0.0, lane) * step(lane, (laneCount - 1.0)));
+    float centre = laneCentre(lane, warp, x, laneH, bandH);
+    float dpx = (abs((uv.y - centre)) * u_resolution.y);
+    float weight = (0.5 + (0.5 * hash((lane + (warp * 31.0)))));
+    line = max(line, (((1.0 - smoothstep(0.5, 1.4, dpx)) * inLane) * weight));
+  }
+  float edgeX =
+      (smoothstep(0.0, 0.22, uv.x) * (1.0 - smoothstep(0.84, 1.0, uv.x)));
+  float edgeY =
+      (smoothstep(0.0, 0.08, uv.y) * (1.0 - smoothstep(0.92, 1.0, uv.y)));
+  float alpha = (((line * edgeX) * edgeY) * 0.85);
+  vec3 ink = vec3(0.0, 0.0, 0.0);
+  vec3 paper = vec3(1.0, 1.0, 1.0);
+  fragColor = vec4(mix(paper, ink, alpha), 1.0);
+  return;
+}
+
+#endif

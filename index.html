@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nripesh Niketan</title>
+    <meta name="description" content="Nripesh Niketan writes compilers, mostly for GPU code. Author of CrossTL, the open-source translator for shaders and compute kernels; Apple MLX contributor; MetalFish chess engine. Sheffield, UK." />
+    <meta name="color-scheme" content="light" />
+    <meta property="og:title" content="Nripesh Niketan" />
+    <meta property="og:description" content="I write compilers, mostly for GPU code." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nripeshn.github.io/" />
+    <link rel="canonical" href="https://nripeshn.github.io/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:image" content="https://nripeshn.github.io/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Person","name":"Nripesh Niketan","url":"https://nripeshn.github.io/","image":"https://nripeshn.github.io/portrait.jpg","jobTitle":"Compiler and ML-systems engineer","email":"mailto:nripesh14@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Sheffield","addressCountry":"GB"},"worksFor":{"@type":"Organization","name":"CrossGL LLC","url":"https://crossgl.net"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"University of Sheffield"},{"@type":"CollegeOrUniversity","name":"Heriot-Watt University"}],"sameAs":["https://github.com/NripeshN","https://www.linkedin.com/in/nripeshn/","https://scholar.google.com/citations?user=kDUtsL4AAAAJ","https://orcid.org/0009-0008-2066-1937"]}
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <a class="skip" href="#crosstl">Skip to the work</a>
+
+    <header class="masthead grid">
+      <a class="masthead__name" href="#top">Nripesh Niketan</a>
+      <nav class="masthead__nav" aria-label="Sections">
+        <a href="#crosstl">Work</a>
+        <a href="#research">Research</a>
+        <a href="#papers">Papers</a>
+        <a href="#chess">Chess</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero grid" aria-labelledby="hero-title">
+        <div class="hero__text">
+          <h1 id="hero-title" class="display">I write compilers, mostly for GPU&nbsp;code.</h1>
+          <p class="hero__lede">I'm Nripesh Niketan, a compiler and ML-systems engineer in Sheffield. The main one is CrossTL, which translates shaders and compute kernels between GPU languages. I started it in 2024 and set up a small company around it, CrossGL.</p>
+        </div>
+        <div class="hero__visual">
+          <canvas id="lanes" class="hero__canvas" aria-label="Forty-eight ink lanes flowing across the page and swapping places in butterfly pairs, drawn by a shader that CrossTL translated from CrossGL." role="img"></canvas>
+          <a class="hero__strip" href="#stage">
+            <code>lanes.cgl → webgl</code>
+            <span>this canvas runs the GLSL ES that CrossTL {{fig:crosstl.pypiLatest}} wrote from one CrossGL file</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="crosstl" class="section grid" aria-labelledby="crosstl-title">
+        <h2 id="crosstl-title" class="display display--2">CrossTL</h2>
+        <div class="prose">
+          <p class="lead">Most GPU code gets written three times: once for CUDA, once for Metal, once for whatever ships next. CrossTL is a compiler so you write it once.</p>
+          <p>Every translation goes through CrossGL, a small intermediate language. A frontend imports GLSL, HLSL, Metal, CUDA or another source into CrossGL; a code generator writes CrossGL out as Metal, HLSL, SPIR-V, WGSL or another target. Adding a language means writing one frontend and one backend.</p>
+          <ol class="pipeline" aria-label="How a translation runs">
+            <li>native source</li>
+            <li>frontend</li>
+            <li>CrossGL source</li>
+            <li>CrossGL parser</li>
+            <li>code generator</li>
+            <li>target source</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="stage" class="stage" aria-labelledby="stage-title">
+        <div class="stage__pin">
+        <div class="grid stage__head">
+          <h2 id="stage-title" class="stage__title">One source, every target</h2>
+          <p class="stage__intro">The shader behind the headline, as I wrote it in CrossGL on the left, and what CrossTL emits for each target on the right. Nothing here is edited by hand. Scroll, or pick a target.</p>
+          <div id="hub" class="hub" aria-hidden="true"></div>
+        </div>
+        <div class="grid stage__panels">
+          <div class="panel panel--source">
+            <div class="panel__head"><span class="panel__name">lanes.cgl</span><span class="panel__meta">CrossGL, {{lines:lanes.cgl}} lines</span></div>
+            {{code:lanes.cgl}}
+          </div>
+          <div class="panel panel--target">
+            <div class="tabs" role="tablist" aria-label="Target language">
+              <button role="tab" aria-selected="true" aria-controls="out-metal" id="tab-metal" class="tab" style="--accent: var(--lang-metal)" data-target="metal">Metal</button>
+              <button role="tab" aria-selected="false" aria-controls="out-directx" id="tab-directx" class="tab" style="--accent: var(--lang-hlsl)" data-target="directx" tabindex="-1">HLSL</button>
+              <button role="tab" aria-selected="false" aria-controls="out-vulkan" id="tab-vulkan" class="tab" style="--accent: var(--lang-spirv)" data-target="vulkan" tabindex="-1">SPIR-V</button>
+              <button role="tab" aria-selected="false" aria-controls="out-wgsl" id="tab-wgsl" class="tab" style="--accent: var(--lang-wgsl)" data-target="wgsl" tabindex="-1">WGSL</button>
+              <button role="tab" aria-selected="false" aria-controls="out-opengl" id="tab-opengl" class="tab" style="--accent: var(--lang-glsl)" data-target="opengl" tabindex="-1">GLSL</button>
+              <button role="tab" aria-selected="false" aria-controls="out-cuda" id="tab-cuda" class="tab" style="--accent: var(--lang-cuda)" data-target="cuda" tabindex="-1">CUDA</button>
+              <button role="tab" aria-selected="false" aria-controls="out-hip" id="tab-hip" class="tab" style="--accent: var(--lang-hip)" data-target="hip" tabindex="-1">HIP</button>
+              <button role="tab" aria-selected="false" aria-controls="out-slang" id="tab-slang" class="tab" style="--accent: var(--lang-slang)" data-target="slang" tabindex="-1">Slang</button>
+              <button role="tab" aria-selected="false" aria-controls="out-rust" id="tab-rust" class="tab" style="--accent: var(--lang-rust)" data-target="rust" tabindex="-1">Rust</button>
+              <button role="tab" aria-selected="false" aria-controls="out-mojo" id="tab-mojo" class="tab" style="--accent: var(--lang-mojo)" data-target="mojo" tabindex="-1">Mojo</button>
+              <button role="tab" aria-selected="false" aria-controls="out-webgl" id="tab-webgl" class="tab" style="--accent: var(--lang-webgl)" data-target="webgl" tabindex="-1">WebGL</button>
+            </div>
+            <div class="outputs">
+              <div role="tabpanel" id="out-metal" aria-labelledby="tab-metal" class="output" data-target="metal"><div class="panel__head"><span class="panel__name">lanes.metal</span><span class="panel__meta">{{lines:lanes.metal}} lines</span></div>{{code:lanes.metal}}</div>
+              <div role="tabpanel" id="out-directx" aria-labelledby="tab-directx" class="output" data-target="directx" hidden><div class="panel__head"><span class="panel__name">lanes.hlsl</span><span class="panel__meta">{{lines:lanes.directx}} lines</span></div>{{code:lanes.directx}}</div>
+              <div role="tabpanel" id="out-vulkan" aria-labelledby="tab-vulkan" class="output" data-target="vulkan" hidden><div class="panel__head"><span class="panel__name">lanes.spvasm</span><span class="panel__meta">{{lines:lanes.vulkan}} lines</span></div>{{code:lanes.vulkan}}</div>
+              <div role="tabpanel" id="out-wgsl" aria-labelledby="tab-wgsl" class="output" data-target="wgsl" hidden><div class="panel__head"><span class="panel__name">lanes.wgsl</span><span class="panel__meta">{{lines:lanes.wgsl}} lines</span></div>{{code:lanes.wgsl}}</div>
+              <div role="tabpanel" id="out-opengl" aria-labelledby="tab-opengl" class="output" data-target="opengl" hidden><div class="panel__head"><span class="panel__name">lanes.glsl</span><span class="panel__meta">{{lines:lanes.opengl}} lines</span></div>{{code:lanes.opengl}}</div>
+              <div role="tabpanel" id="out-cuda" aria-labelledby="tab-cuda" class="output" data-target="cuda" hidden><div class="panel__head"><span class="panel__name">lanes.cu</span><span class="panel__meta">{{lines:lanes.cuda}} lines</span></div>{{code:lanes.cuda}}</div>
+              <div role="tabpanel" id="out-hip" aria-labelledby="tab-hip" class="output" data-target="hip" hidden><div class="panel__head"><span class="panel__name">lanes.hip</span><span class="panel__meta">{{lines:lanes.hip}} lines</span></div>{{code:lanes.hip}}</div>
+              <div role="tabpanel" id="out-slang" aria-labelledby="tab-slang" class="output" data-target="slang" hidden><div class="panel__head"><span class="panel__name">lanes.slang</span><span class="panel__meta">{{lines:lanes.slang}} lines</span></div>{{code:lanes.slang}}</div>
+              <div role="tabpanel" id="out-rust" aria-labelledby="tab-rust" class="output" data-target="rust" hidden><div class="panel__head"><span class="panel__name">lanes.rs</span><span class="panel__meta">{{lines:lanes.rust}} lines</span></div>{{code:lanes.rust}}</div>
+              <div role="tabpanel" id="out-mojo" aria-labelledby="tab-mojo" class="output" data-target="mojo" hidden><div class="panel__head"><span class="panel__name">lanes.mojo</span><span class="panel__meta">{{lines:lanes.mojo}} lines</span></div>{{code:lanes.mojo}}</div>
+              <div role="tabpanel" id="out-webgl" aria-labelledby="tab-webgl" class="output" data-target="webgl" hidden><div class="panel__head"><span class="panel__name">lanes.webgl.glsl</span><span class="panel__meta">{{lines:lanes.webgl}} lines, running above</span></div>{{code:lanes.webgl}}</div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="grid">
+          <dl class="figures" aria-label="CrossTL on GitHub and PyPI">
+            <div><dt>GitHub stars</dt><dd data-live="stars">{{fig:crosstl.stars}}</dd></div>
+            <div><dt>Forks</dt><dd data-live="forks">{{fig:crosstl.forks}}</dd></div>
+            <div><dt>Contributors</dt><dd>{{fig:crosstl.humanContributors}}</dd></div>
+            <div><dt>Commits on main</dt><dd>{{fig:crosstl.defaultBranchCommits}}</dd></div>
+            <div><dt>of them mine</dt><dd>{{fig:crosstl.myContributions}}</dd></div>
+            <div><dt>Latest release</dt><dd>{{fig:crosstl.latestRelease}}</dd></div>
+            <div><dt>PyPI releases</dt><dd>{{fig:crosstl.pypiReleases}}</dd></div>
+          </dl>
+          <p class="figures__asat">GitHub and PyPI, as at <span data-live="asat">{{date:asAt}}</span>.</p>
+        </div>
+      </section>
+
+      <section class="section grid" aria-labelledby="closed-title">
+        <h3 id="closed-title" class="h3">It fails closed</h3>
+        <div class="prose">
+          <p>If CrossTL can't translate something, it stops with an error that names the construct and the target, instead of emitting a placeholder. Every push runs thousands of generated feature probes through it and checks the output with each language's own compiler or validator: glslang, DXC, spirv-val, naga, the Metal compiler, nvcc, hipcc, slangc, rust-gpu and the Mojo compiler. The chart below is that CI run.</p>
+        </div>
+        <figure class="coverage">
+          <img src="https://raw.githubusercontent.com/CrossGL/crosstl/coverage/coverage.svg" alt="CrossTL coverage chart from CI. For each language and direction it shows the share of generated feature tests where CrossTL's output is accepted by that language's own compiler or validator." loading="lazy" width="1200" height="520" />
+          <figcaption>Share of generated feature tests whose output the target's own compiler accepts, per language and direction. Updated by CrossTL's CI; <a href="https://github.com/CrossGL/crosstl/blob/coverage/COVERAGE.md">COVERAGE.md</a> lists every gap behind each bar.</figcaption>
+        </figure>
+        <div class="prose">
+          <table class="table table--langs">
+            <caption>Languages, from the README</caption>
+            <thead><tr><th scope="col">Language</th><th scope="col">Output</th><th scope="col">Input</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-glsl)"></span>GLSL</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-hlsl)"></span>HLSL</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-metal)"></span>Metal</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-spirv)"></span>SPIR-V assembly</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-wgsl)"></span>WGSL</th><td>yes</td><td>no</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-webgl)"></span>GLSL ES 3.00 (WebGL 2)</th><td>yes</td><td>no</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-cuda)"></span>CUDA</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-hip)"></span>HIP</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-slang)"></span>Slang</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-rust)"></span>Rust (rust-gpu)</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-mojo)"></span>Mojo</th><td>yes</td><td>yes</td></tr>
+              <tr><th scope="row"><span class="swatch" style="--accent: var(--lang-opencl)"></span>OpenCL C</th><td>no</td><td>yes</td></tr>
+            </tbody>
+          </table>
+          <p class="links">
+            <a href="https://github.com/CrossGL/crosstl">github.com/CrossGL/crosstl</a>
+            <a href="https://pypi.org/project/crosstl/">pypi.org/project/crosstl</a>
+            <a href="https://docs.crossgl.net/products/crossgl-translator/index.html">docs.crossgl.net</a>
+            <a href="https://doi.org/10.5281/zenodo.15826974">doi 10.5281/zenodo.15826974</a>
+            <a href="https://arxiv.org/abs/2508.21256">arXiv 2508.21256</a>
+            <a href="https://crossgl.net">crossgl.net</a>
+            <span>{{fig:crosstl.license}} licence</span>
+          </p>
+          <p>There's also a <a href="https://github.com/CrossGL/compiler">C++ compiler for CrossGL itself</a>, which is still early. CrossGL LLC also ships Dyson and Credora; <a href="https://crossgl.net">crossgl.net</a> has those.</p>
+        </div>
+      </section>
+
+      <section id="open-source" class="section grid" aria-labelledby="oss-title">
+        <h2 id="oss-title" class="display display--2">Macs have GPUs</h2>
+        <div class="prose">
+          <p class="lead">In 2023 I went round ML libraries telling them so. The Apple Silicon support I landed:</p>
+        </div>
+        {{prs}}
+        <div class="prose">
+          <p>{{fig:pullRequests.mergedTotal}} merged public pull requests in all, {{fig:pullRequests.mergedThirdParty}} of them in projects I don't maintain.</p>
+          <h3 class="h3">Apple MLX</h3>
+          <p>In MLX I added the softsign, softmax, hardswish and log-softmax activations, <code>Dropout3d</code>, <code>logical_and</code> and <code>logical_or</code>, <code>clip_grad_norm</code> with <code>tree_reduce</code>, <code>cross</code> and the orthogonal initialiser, over six feature PRs (<a href="https://github.com/ml-explore/mlx/pull/309">#309</a>, <a href="https://github.com/ml-explore/mlx/pull/313">#313</a>, <a href="https://github.com/ml-explore/mlx/pull/386">#386</a>, <a href="https://github.com/ml-explore/mlx/pull/1043">#1043</a>, <a href="https://github.com/ml-explore/mlx/pull/1252">#1252</a>, <a href="https://github.com/ml-explore/mlx/pull/1651">#1651</a>), plus formatter and pre-commit maintenance. I'm first on MLX's <a href="https://github.com/ml-explore/mlx/blob/main/ACKNOWLEDGMENTS.md">acknowledgements list</a>. {{fig:pullRequests.mergedMlx}} merged PRs across mlx, mlx-data and mlx-examples.</p>
+          <p>I also started an <a href="https://github.com/ml-explore/mlx/pull/2300">experimental ROCm backend</a> for MLX (opened June 2025, {{fig:mlxRocmPr.additions}} additions, still open). I wrote the first version without an AMD GPU, so I found out it ran from someone else's screenshot in the thread.</p>
+          <h3 class="h3">Before CrossGL</h3>
+          <p>I was at Unify, first writing code for <a href="https://github.com/unifyai/ivy">Ivy</a> (41 merged PRs: JAX, PaddlePaddle, TensorFlow and PyTorch frontends, and Apple-silicon GPU support), then running their open-source contributor programme, with 85-plus volunteers and 58 PRs reviewed.</p>
+          <p>Smaller things: <a href="https://github.com/NripeshN/clang-format-metal">clang-format-metal</a>, a pre-commit hook for C++ and Metal sources (I also added the <code>metal</code> file type upstream in <a href="https://github.com/pre-commit/mirrors-clang-format/pull/32">pre-commit/mirrors-clang-format</a>). <a href="https://pypi.org/project/panthon/">Panthon</a>, a Python attack-simulation library, {{fig:panthon.pypiReleases}} PyPI releases. <a href="https://github.com/NripeshN/picture-to-Excel">Picture-to-Excel</a>, OCR tables into spreadsheets.</p>
+        </div>
+      </section>
+
+      <section id="metalfish" class="stage stage--chess" aria-labelledby="metalfish-title">
+        <div class="grid">
+          <h2 id="metalfish-title" class="display display--2 stage__display">MetalFish</h2>
+          <div class="prose prose--stage">
+            <p class="lead">MetalFish is my chess engine. It's basically Stockfish's search on the CPU and an Lc0-style transformer search on the GPU, looking at the same position at the same time.</p>
+            <p>A UCI engine with three modes in one binary: CPU alpha-beta with NNUE (the strength), GPU Monte Carlo tree search with an Lc0-compatible BT4 transformer (the research path), and a hybrid that runs both on one position, exchanges root-level signals through lock-free shared state, and lets a coordinator pick the move. In practice the hybrid plays about as well as the alpha-beta half does on its own; the GPU side is a research and diagnostic path, not a strength multiplier. Metal and MPSGraph on Apple silicon, CUDA on NVIDIA, a CPU fallback with hand-written ARM NEON kernels. Prebuilt binaries for macOS arm64, Linux x86-64 and arm64, and Windows x86-64. GPL-3.0.</p>
+            <p>Measured on an M2 Max, October 2026, with the records in the repo: Metal transformer inference runs at 135 positions per second at batch 1 (FP16) and 538 at batch 64. The alpha-beta search does 1.53M nodes per second on one thread and 11.81M on eight (depth 16, five repeats).</p>
+          </div>
+          <figure class="board">
+            <div class="board__scene" data-fen="8/5k2/p7/5Pp1/PP2p1Pp/2P1b2P/5q2/5K2 w - - 4 1" data-last="d2f2" data-side="black" data-theme="stage" title="Replay the move">
+              <img src="https://lichess1.org/export/fen.gif?fen=8/5k2/p7/5Pp1/PP2p1Pp/2P1b2P/5q2/5K2_w_-_-_4_1&color=black&lastMove=d2f2" width="360" height="360" loading="lazy" alt="Chess position from black's side: the black queen on f2, protected by the bishop on e3, checkmates the white king on f1." />
+            </div>
+            <figcaption>MetalFish (black) mating a 3059-rated bot: the queen goes from d2 to f2, mate. <a href="https://lichess.org/JA1XvXkf">The game on Lichess.</a></figcaption>
+          </figure>
+          <dl class="figures figures--stage" aria-label="The Lichess bot's record">
+            <div><dt>Games</dt><dd data-live="bot-games">{{fig:lichessBot.games}}</dd></div>
+            <div><dt>Draws</dt><dd data-live="bot-draws">{{fig:lichessBot.draws}}</dd></div>
+            <div><dt>Wins</dt><dd data-live="bot-wins">{{fig:lichessBot.wins}}</dd></div>
+            <div><dt>Losses</dt><dd data-live="bot-losses">{{fig:lichessBot.losses}}</dd></div>
+            <div><dt>Bullet</dt><dd data-live="bot-bullet">{{fig:lichessBot.bullet}}</dd></div>
+            <div><dt>Blitz</dt><dd data-live="bot-blitz">{{fig:lichessBot.blitz}}</dd></div>
+            <div><dt>Rapid</dt><dd data-live="bot-rapid">{{fig:lichessBot.rapid}}</dd></div>
+          </dl>
+          <p class="figures__asat figures__asat--stage">Its <a href="https://lichess.org/@/Nripesh-MetalFish">Lichess bot</a> ran on my MacBook between January and July 2026. Record from the Lichess API, as at <span data-live="bot-asat">{{date:asAt}}</span>.</p>
+          <p class="prose--stage stage__paper">The paper: <a href="https://doi.org/10.1007/978-3-032-32726-0_39">Hybrid Chess Search: Combining Alpha-Beta and Monte Carlo Tree Search on Unified Memory Architectures</a>, IntelliSys 2026, Springer. <a href="https://github.com/NripeshN/MetalFish">Source on GitHub.</a></p>
+        </div>
+      </section>
+
+      <section id="papers" class="section grid" aria-labelledby="papers-title">
+        <h2 id="papers-title" class="display display--2">Papers</h2>
+        <ol class="papers">
+          <li><span>Niketan, N. (2026). <a href="https://doi.org/10.1007/978-3-032-32726-0_39">Hybrid Chess Search: Combining Alpha-Beta and Monte Carlo Tree Search on Unified Memory Architectures.</a> <cite>Intelligent Systems and Applications</cite> (IntelliSys 2026), Springer Lecture Notes in Networks and Systems, pp. 653–664.</span></li>
+          <li><span>Niketan, N., Shrivastava, V., Srivastav, B., Mishra, S. (in press). CrossGL: A Hub-and-Spoke Compiler Infrastructure for Universal Shader Translation Across Heterogeneous GPU Architectures. FTC 2026, Springer Lecture Notes in Networks and Systems.</span></li>
+          <li><span>Niketan, N., Shrivastava, V. (2025, revised October 2026). <a href="https://arxiv.org/abs/2508.21256">CrossTL: Hub-Based Translation of GPU Programs and the Preservation of Source Rules.</a> arXiv:2508.21256.</span></li>
+          <li><span>Niketan, N., Santhoshkumar, A., Batatia, H. (2025). <a href="https://doi.org/10.1007/978-981-96-1758-6_34">Integrating External Tools with Large Language Models (LLMs) to Improve Accuracy.</a> <cite>Proceedings of ICITA 2024</cite>, Springer Lecture Notes in Networks and Systems, pp. 409–421. Extended version: <a href="https://arxiv.org/abs/2507.08034">arXiv:2507.08034</a>.</span></li>
+          <li><span>Niketan, N., Shrivastava, V. <a href="https://doi.org/10.5281/zenodo.15826974">CrossTL: Universal Programming Language and Translator</a> (software). Zenodo.</span></li>
+        </ol>
+      </section>
+
+      <section id="research" class="section grid" aria-labelledby="research-title">
+        <h2 id="research-title" class="display display--2">What I want to work on next</h2>
+        <div class="prose">
+          <ul class="research">
+            <li>Translating GPU programs between vendors without losing the source's rules: what a hub IR has to preserve, and how to test the result against each target's own toolchain. This is the CrossTL work.</li>
+            <li>Memory-safe GPU programs: a bounds-checking contract that survives translation, a differential oracle across targets, and the optimisations that make the checks cheap.</li>
+            <li>Compilation as a deployment policy: predicting what to compile next for programs you have never seen, and controlling speculative compilation online.</li>
+            <li>Hybrid search on unified-memory machines, where a CPU tree search and a GPU network search share one position.</li>
+          </ul>
+          <p>I hold an unconditional offer for a PhD in Computer Science at the University of Leeds (Pattern-aware Parallel Software Development, from October 2027).</p>
+        </div>
+      </section>
+
+      <section id="timeline" class="section grid" aria-labelledby="timeline-title">
+        <h2 id="timeline-title" class="display display--2">So far</h2>
+        <figure class="portrait">
+          <picture>
+            <source srcset="/portrait.webp" type="image/webp" />
+            <img src="/portrait.jpg" alt="Nripesh Niketan" width="640" height="640" loading="lazy" />
+          </picture>
+        </figure>
+        <dl class="timeline">
+          <div><dt>May 2024 to now</dt><dd>Founder and principal engineer, CrossGL LLC, remote from the UK. CrossTL, and the compiler, Dyson and Credora around it.</dd></div>
+          <div><dt>2024 to 2026</dt><dd>MSc Cybersecurity and Artificial Intelligence, University of Sheffield. Distinction.</dd></div>
+          <div><dt>Spring 2024</dt><dd>AI/ML engineer intern, AAICO, Abu Dhabi. A medical-coding pipeline on AWS Lambda and SQS with retrieval-augmented generation and vision extraction.</dd></div>
+          <div><dt>2023 to 2024</dt><dd>Unify, London, remote. ML engineer on Ivy, then developer relations lead.</dd></div>
+          <div><dt>2022 to 2023</dt><dd>IT business analyst intern, Emerson (now Copeland), Dubai. Oracle ASN automation, Domo ETL, OCR to Excel, a multithreaded Selenium scraper.</dd></div>
+          <div><dt>2021 to 2024</dt><dd>BSc (Hons) Computer Science (Artificial Intelligence), Heriot-Watt University, Dubai, on a 50% scholarship with advanced standing. President and captain of the football club in 2022–23.</dd></div>
+          <div><dt>2026</dt><dd>Member of the Institution of Engineering and Technology.</dd></div>
+        </dl>
+      </section>
+
+      <section id="chess" class="section grid" aria-labelledby="chess-title">
+        <h2 id="chess-title" class="display display--2">Chess</h2>
+        <div class="prose">
+          <p class="lead">I play too, for Sheffield University in the Sheffield &amp; District league, and I'm about 1700 FIDE. On Lichess my engine's bullet rating is about 1,450 points higher than mine.</p>
+        </div>
+        <figure class="board board--paper">
+          <div class="board__scene" data-fen="rnbq1bnr/pppp1kpp/5P2/3NN3/5p2/8/PPPPQ1PP/R1B1KB1R b KQ - 2 1" data-last="f3e5" data-side="white" data-theme="paper" title="Replay the move">
+            <img src="https://lichess1.org/export/fen.gif?fen=rnbq1bnr/pppp1kpp/5P2/3NN3/5p2/8/PPPPQ1PP/R1B1KB1R_b_KQ_-_2_1&color=white&lastMove=f3e5" width="360" height="360" loading="lazy" alt="Chess position after 9.Ne5+ in a Vienna Gambit: white knights on d5 and e5, a white pawn on f6, the black king in check on f7. Black resigned." />
+          </div>
+          <figcaption>Me (white) against a 1900, nine moves into a Vienna Gambit: 9.Ne5+, and they resigned. <a href="https://lichess.org/UROoH81r">The game.</a></figcaption>
+        </figure>
+      </section>
+
+      <section id="contact" class="section grid" aria-labelledby="contact-title">
+        <h2 id="contact-title" class="display display--2">Contact</h2>
+        <div class="prose">
+          <p class="lead">I'm looking for a compiler, GPU or ML-systems engineering role in the UK, and for a funded PhD in compilers for heterogeneous hardware from October 2027. Email is best.</p>
+          <p class="links links--contact">
+            <a href="mailto:nripesh14@gmail.com">nripesh14@gmail.com</a>
+            <a href="https://github.com/NripeshN">github.com/NripeshN</a>
+            <a href="https://www.linkedin.com/in/nripeshn/">linkedin.com/in/nripeshn</a>
+            <a href="https://scholar.google.com/citations?user=kDUtsL4AAAAJ">Google Scholar</a>
+            <a href="https://orcid.org/0009-0008-2066-1937">ORCID 0009-0008-2066-1937</a>
+            <a href="/cv/Nripesh-Niketan-CV.pdf">CV (PDF)</a>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer grid">
+      <p>Figures on this page come from the GitHub, PyPI and Lichess APIs, last pulled {{date:asAt}}, and are refreshed every week. The hero shader is translated by CrossTL at build time. <a href="https://github.com/NripeshN/NripeshN.github.io">Source.</a></p>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

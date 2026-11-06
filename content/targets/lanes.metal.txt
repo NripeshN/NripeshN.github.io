@@ -1,0 +1,70 @@
+
+#include <metal_stdlib>
+using namespace metal;
+
+// Constant Buffers
+struct Uniforms {
+  float u_time;
+  float2 u_resolution;
+};
+// Vertex Shader
+struct vertex_main_Input {
+  float2 a_pos [[attribute(0)]];
+};
+
+vertex float4 vertex_main(vertex_main_Input _crossglInput [[stage_in]],
+                          constant Uniforms &uniforms [[buffer(0)]]) {
+  float2 a_pos = _crossglInput.a_pos;
+  return float4(a_pos, 0.0, 1.0);
+}
+
+float bitOf(float lane, float stage) {
+  return ((floor(lane / pow(2.0, stage))) -
+          ((2.0) * floor((floor(lane / pow(2.0, stage))) / (2.0))));
+}
+
+float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
+
+float laneCentre(float lane, float warp, float x, float laneH, float bandH) {
+  float stage = ((floor(x)) - ((4.0) * floor((floor(x)) / (4.0))));
+  float phase = fract(x);
+  float ease =
+      smoothstep(0.1, 0.45, phase) * (1.0 - smoothstep(0.55, 0.9, phase));
+  float dir = bitOf(lane, stage) * 2.0 - 1.0;
+  float amp = pow(2.0, stage) * laneH * 0.5;
+  float drift = sin(x * 2.3 + lane * 0.9 + warp * 1.7) * laneH * 0.15;
+  return (lane + 0.5) * laneH + warp * bandH + bandH * 0.1 + ease * dir * amp +
+         drift;
+}
+
+// Fragment Shader
+fragment float4 fragment_main(float4 _crossglFragCoord [[position]],
+                              constant Uniforms &uniforms [[buffer(0)]]) {
+  float2 uv = _crossglFragCoord.xy / uniforms.u_resolution;
+  float laneCount = 16.0;
+  float warpCount = 3.0;
+  float bandH = 1.0 / warpCount;
+  float laneH = bandH * 0.8 / laneCount;
+  float warp = floor(uv.y * warpCount);
+  float local = (uv.y - warp * bandH - bandH * 0.1) / laneH;
+  float lane0 = floor(local);
+  float t = uniforms.u_time * 0.05;
+  float x = uv.x * 2.4 + t + warp * 1.37;
+  float line = 0.0;
+  for (int j = -8; j <= 8; j = j + 1) {
+    float lane = lane0 + float(j);
+    float inLane = step(0.0, lane) * step(lane, laneCount - 1.0);
+    float centre = laneCentre(lane, warp, x, laneH, bandH);
+    float dpx = abs(uv.y - centre) * uniforms.u_resolution.y;
+    float weight = 0.5 + 0.5 * hash(lane + warp * 31.0);
+    line = max(line, (1.0 - smoothstep(0.5, 1.4, dpx)) * inLane * weight);
+  }
+  float edgeX =
+      smoothstep(0.0, 0.22, uv.x) * (1.0 - smoothstep(0.84, 1.0, uv.x));
+  float edgeY =
+      smoothstep(0.0, 0.08, uv.y) * (1.0 - smoothstep(0.92, 1.0, uv.y));
+  float alpha = line * edgeX * edgeY * 0.85;
+  float3 ink = float3(0.0, 0.0, 0.0);
+  float3 paper = float3(1.0, 1.0, 1.0);
+  return float4(mix(paper, ink, alpha), 1.0);
+}

@@ -1,0 +1,105 @@
+{
+  "asAt": "2026-11-06",
+  "prs": [
+    {
+      "project": "Hugging Face Transformers",
+      "repo": "huggingface/transformers",
+      "number": 24660,
+      "title": "Add is_torch_mps_available function to utils",
+      "merged": "2023-07-05",
+      "additions": 19,
+      "deletions": 2,
+      "url": "https://github.com/huggingface/transformers/pull/24660"
+    },
+    {
+      "project": "PyTorch Lightning",
+      "repo": "Lightning-AI/pytorch-lightning",
+      "number": 18127,
+      "title": "Add GPU Acceleration apple silicon examples",
+      "merged": "2023-07-27",
+      "additions": 19,
+      "deletions": 3,
+      "url": "https://github.com/Lightning-AI/pytorch-lightning/pull/18127"
+    },
+    {
+      "project": "DeepSpeed",
+      "repo": "deepspeedai/DeepSpeed",
+      "number": 3907,
+      "title": "Create accelerator for apple silicon GPU Acceleration",
+      "merged": "2023-07-17",
+      "additions": 267,
+      "deletions": 19,
+      "url": "https://github.com/deepspeedai/DeepSpeed/pull/3907"
+    },
+    {
+      "project": "Hugging Face PEFT",
+      "repo": "huggingface/peft",
+      "number": 1217,
+      "title": "feat: add apple silicon GPU acceleration",
+      "merged": "2023-12-15",
+      "additions": 21,
+      "deletions": 16,
+      "url": "https://github.com/huggingface/peft/pull/1217"
+    },
+    {
+      "project": "PyTorch Geometric",
+      "repo": "pyg-team/pytorch_geometric",
+      "number": 7770,
+      "title": "Apple Silicon \"MPS\" support main examples",
+      "merged": "2023-07-19",
+      "additions": 129,
+      "deletions": 20,
+      "url": "https://github.com/pyg-team/pytorch_geometric/pull/7770"
+    },
+    {
+      "project": "Kornia",
+      "repo": "kornia/kornia",
+      "number": 2425,
+      "title": "Add GPU support apple silicon  augmentation 2D",
+      "merged": "2023-07-01",
+      "additions": 33,
+      "deletions": 2,
+      "url": "https://github.com/kornia/kornia/pull/2425"
+    },
+    {
+      "project": "Haystack",
+      "repo": "deepset-ai/haystack",
+      "number": 6151,
+      "title": "feat: add apple silicon GPU acceleration",
+      "merged": "2023-10-30",
+      "additions": 61,
+      "deletions": 4,
+      "url": "https://github.com/deepset-ai/haystack/pull/6151"
+    },
+    {
+      "project": "OpenMMLab MMPreTrain",
+      "repo": "open-mmlab/mmpretrain",
+      "number": 1699,
+      "title": "Add GPU Acceleration Apple silicon mac",
+      "merged": "2023-07-26",
+      "additions": 16,
+      "deletions": 12,
+      "url": "https://github.com/open-mmlab/mmpretrain/pull/1699"
+    },
+    {
+      "project": "Raster Vision",
+      "repo": "azavea/raster-vision",
+      "number": 1985,
+      "title": "Add Apple Silicon GPU Acceleration",
+      "merged": "2023-11-20",
+      "additions": 9,
+      "deletions": 2,
+      "url": "https://github.com/azavea/raster-vision/pull/1985"
+    },
+    {
+      "project": "Ray",
+      "repo": "ray-project/ray",
+      "number": 38464,
+      "title": "Add Apple silicon GPU(mps) support to ray",
+      "merged": "2026-08-04",
+      "additions": 483,
+      "deletions": 2,
+      "url": "https://github.com/ray-project/ray/pull/38464"
+    }
+  ]
+}

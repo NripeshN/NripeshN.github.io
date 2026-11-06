@@ -1,0 +1,87 @@
+// Generated Rust GPU Shader Code
+use gpu::*;
+use math::*;
+
+// Constant Buffers
+// CrossGL resource metadata: name=Uniforms kind=cbuffer set=0 binding=0
+// binding_source=automatic
+#[repr(C)]
+#[derive(Debug, Clone, Copy)]
+pub struct Uniforms {
+  pub u_time : f32, pub u_resolution : Vec2<f32>,
+}
+
+static U_TIME : f32 = 0.0;
+static U_RESOLUTION : std::sync::LazyLock<Vec2<f32>> =
+                          std::sync::LazyLock::new (|| Default::default());
+// Vertex Shader
+#[cfg_attr(feature = "crossgl_gpu", vertex_shader)]
+pub fn vertex_main(a_pos : Vec2<f32>) -> Vec4<f32> {
+  return Vec4::<f32>::new (a_pos.x, a_pos.y, 0.0, 1.0);
+}
+
+// Fragment Shader
+#[cfg_attr(feature = "crossgl_gpu", fragment_shader)]
+pub fn fragment_main() -> Vec4<f32> {
+  let uv : Vec2<f32> = (gl_FragCoord.xy / *U_RESOLUTION);
+  let laneCount : f32 = 16.0;
+  let warpCount : f32 = 3.0;
+  let bandH : f32 = (1.0 / warpCount);
+  let laneH : f32 = ((bandH * 0.8) / laneCount);
+  let warp : f32 = floor((uv.y * warpCount));
+  let local : f32 = (((uv.y - (warp * bandH)) - (bandH * 0.1)) / laneH);
+  let lane0 : f32 = floor(local);
+  let t : f32 = (U_TIME * 0.05);
+  let x : f32 = (((uv.x * 2.4) + t) + (warp * 1.37));
+  let mut line : f32 = 0.0;
+  let mut j : i32 = (-8);
+  while (j <= 8) {
+    let lane : f32 = (lane0 + (j as f32));
+    let inLane : f32 = (step(0.0, lane) * step(lane, (laneCount - 1.0)));
+    let centre : f32 = laneCentre(lane, warp, x, laneH, bandH);
+    let dpx : f32 = (abs((uv.y - centre)) * (*U_RESOLUTION).y);
+    let weight : f32 = (0.5 + (0.5 * hash((lane + (warp * 31.0)))));
+    line = max(line, (((1.0 - smoothstep(0.5, 1.4, dpx)) * inLane) * weight));
+    j = (j + 1);
+  }
+  let edgeX
+      : f32 =
+            (smoothstep(0.0, 0.22, uv.x) * (1.0 - smoothstep(0.84, 1.0, uv.x)));
+  let edgeY
+      : f32 =
+            (smoothstep(0.0, 0.08, uv.y) * (1.0 - smoothstep(0.92, 1.0, uv.y)));
+  let alpha : f32 = (((line * edgeX) * edgeY) * 0.85);
+  let ink : Vec3<f32> = Vec3::<f32>::new (0.0, 0.0, 0.0);
+  let paper : Vec3<f32> = Vec3::<f32>::new (1.0, 1.0, 1.0);
+  return {
+    let __cgl_vec_arg_0 = lerp(paper, ink, alpha);
+    Vec4::<f32>::new (__cgl_vec_arg_0.x, __cgl_vec_arg_0.y, __cgl_vec_arg_0.z,
+                      1.0)
+  };
+}
+
+pub fn bitOf(lane : f32, stage : f32) -> f32 {
+  return modulo(floor((lane / pow(2.0, stage))), 2.0);
+}
+
+pub fn hash(n : f32) -> f32 { return fract((sin((n * 12.9898)) * 43758.5453)); }
+
+pub fn laneCentre(lane
+                  : f32, warp
+                  : f32, x
+                  : f32, laneH
+                  : f32, bandH
+                  : f32) -> f32 {
+  let stage : f32 = modulo(floor(x), 4.0);
+  let phase : f32 = fract(x);
+  let ease : f32 = (smoothstep(0.1, 0.45, phase) *
+                    (1.0 - smoothstep(0.55, 0.9, phase)));
+  let dir : f32 = ((bitOf(lane, stage) * 2.0) - 1.0);
+  let amp : f32 = ((pow(2.0, stage) * laneH) * 0.5);
+  let drift
+      : f32 =
+            ((sin((((x * 2.3) + (lane * 0.9)) + (warp * 1.7))) * laneH) * 0.15);
+  return ((((((lane + 0.5) * laneH) + (warp * bandH)) + (bandH * 0.1)) +
+           ((ease * dir) * amp)) +
+          drift);
+}

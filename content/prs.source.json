@@ -1,0 +1,12 @@
+[
+  { "project": "Hugging Face Transformers", "repo": "huggingface/transformers", "number": 24660 },
+  { "project": "PyTorch Lightning", "repo": "Lightning-AI/pytorch-lightning", "number": 18127 },
+  { "project": "DeepSpeed", "repo": "deepspeedai/DeepSpeed", "number": 3907 },
+  { "project": "Hugging Face PEFT", "repo": "huggingface/peft", "number": 1217 },
+  { "project": "PyTorch Geometric", "repo": "pyg-team/pytorch_geometric", "number": 7770 },
+  { "project": "Kornia", "repo": "kornia/kornia", "number": 2425 },
+  { "project": "Haystack", "repo": "deepset-ai/haystack", "number": 6151 },
+  { "project": "OpenMMLab MMPreTrain", "repo": "open-mmlab/mmpretrain", "number": 1699 },
+  { "project": "Raster Vision", "repo": "azavea/raster-vision", "number": 1985 },
+  { "project": "Ray", "repo": "ray-project/ray", "number": 38464 }
+]
